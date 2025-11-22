@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>タスク分析ダッシュボード</title>
+    <link rel="stylesheet" href="css/analysis-styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="container">
+            <h1>📊 タスク分析ダッシュボード</h1>
+            <p>日報データから自動生成された業務分析レポート</p>
+        </div>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <div class="container">
+            <!-- ローディング表示 -->
+            <div id="loading" class="loading">
+                <div class="loading-spinner"></div>
+                <p>日報データを読み込んでいます...</p>
+            </div>
+
+            <!-- エラーメッセージ -->
+            <div id="error" class="error-message hidden">
+                データの読み込みに失敗しました。ブラウザのコンソールを確認してください。
+            </div>
+
+            <!-- ダッシュボード本体 -->
+            <div id="dashboard" class="hidden">
+                <!-- 統計サマリー -->
+                <section class="summary-grid" id="summary"></section>
+
+                <!-- グラフセクション -->
+                <section class="charts-grid">
+                    <!-- 業務時間の推移 -->
+                    <div class="chart-card full-width">
+                        <h2>業務時間の推移</h2>
+                        <div class="chart-container">
+                            <canvas id="hoursChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 業務種別の時間配分 -->
+                    <div class="chart-card">
+                        <h2>業務種別の時間配分</h2>
+                        <div class="chart-container">
+                            <canvas id="categoryPieChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 総合評価の推移 -->
+                    <div class="chart-card">
+                        <h2>総合評価の推移</h2>
+                        <div class="chart-container">
+                            <canvas id="ratingChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 日別タスク数と完了状況 -->
+                    <div class="chart-card full-width">
+                        <h2>日別タスク数と完了状況</h2>
+                        <div class="chart-container">
+                            <canvas id="taskCompletionChart"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 成果・達成事項 -->
+                <section class="list-section">
+                    <h2>✅ 主要な成果・達成事項</h2>
+                    <div class="list-items" id="achievementsList"></div>
+                </section>
+
+                <!-- 課題・問題点 -->
+                <section class="list-section">
+                    <h2>⚠️ 課題・問題点</h2>
+                    <div class="list-items" id="issuesList"></div>
+                </section>
+
+                <!-- タスク詳細テーブル -->
+                <section class="list-section">
+                    <h2>📋 全タスク一覧</h2>
+                    <div class="table-container">
+                        <table id="tasksTable">
+                            <thead>
+                                <tr>
+                                    <th>日付</th>
+                                    <th>業務内容</th>
+                                    <th>カテゴリ</th>
+                                    <th>所要時間</th>
+                                    <th>進捗状況</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tasksTableBody"></tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 タスク分析ダッシュボード | 日報データ自動解析システム</p>
+        </div>
+    </footer>
+
+    <!-- JavaScriptファイル -->
+    <script src="js/analyzer.js"></script>
+    <script>
+        // グローバル変数
+        let charts = {};
+        let analyzer;
+        let data;
+
+        // ページ読み込み時の初期化
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // アナライザーを初期化
+                analyzer = new DailyReportAnalyzer();
+                
+                // データを解析
+                data = await analyzer.analyzeAll();
+                
+                // ダッシュボードを表示
+                renderDashboard(data);
+                
+                // ローディングを非表示、ダッシュボードを表示
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+                
+            } catch (error) {
+                console.error('エラー:', error);
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('error').classList.remove('hidden');
+            }
+        });
+
+        // ダッシュボードを描画
+        function renderDashboard(data) {
+            renderSummary(data.analytics);
+            renderCharts(data.analytics);
+            renderAchievements(data.analytics.allAchievements);
+            renderIssues(data.analytics.allIssues);
+            renderTasksTable(data.analytics.allTasks);
+        }
+
+        // 統計サマリーを描画
+        function renderSummary(analytics) {
+            const summaryHtml = `
+                <div class="summary-card info">
+                    <div class="summary-card-label">分析期間</div>
+                    <div class="summary-card-value">${analytics.totalDays}<span class="summary-card-unit">日間</span></div>
+                </div>
+                <div class="summary-card success">
+                    <div class="summary-card-label">総業務時間</div>
+                    <div class="summary-card-value">${analytics.totalHours.toFixed(1)}<span class="summary-card-unit">時間</span></div>
+                </div>
+                <div class="summary-card warning">
+                    <div class="summary-card-label">平均業務時間</div>
+                    <div class="summary-card-value">${analytics.averageHours.toFixed(1)}<span class="summary-card-unit">時間/日</span></div>
+                </div>
+                <div class="summary-card info">
+                    <div class="summary-card-label">平均評価</div>
+                    <div class="summary-card-value">${analytics.averageRating.toFixed(1)}<span class="summary-card-unit">/ 5.0</span></div>
+                </div>
+            `;
+            document.getElementById('summary').innerHTML = summaryHtml;
+        }
+
+        // グラフを描画
+        function renderCharts(analytics) {
+            // 業務時間の推移グラフ
+            renderHoursChart(analytics.dailyData);
+            
+            // 業務種別の時間配分グラフ
+            renderCategoryPieChart(analytics.hoursByCategory);
+            
+            // 総合評価の推移グラフ
+            renderRatingChart(analytics.dailyData);
+            
+            // タスク完了状況グラフ
+            renderTaskCompletionChart(analytics.dailyData);
+        }
+
+        // 業務時間の推移グラフ
+        function renderHoursChart(dailyData) {
+            const ctx = document.getElementById('hoursChart').getContext('2d');
+            
+            if (charts.hoursChart) {
+                charts.hoursChart.destroy();
+            }
+            
+            charts.hoursChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dailyData.map(d => d.date),
+                    datasets: [{
+                        label: '業務時間',
+                        data: dailyData.map(d => d.hours),
+                        borderColor: '#2563eb',
+                        backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '時間'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 業務種別の時間配分グラフ
+        function renderCategoryPieChart(hoursByCategory) {
+            const ctx = document.getElementById('categoryPieChart').getContext('2d');
+            
+            if (charts.categoryPieChart) {
+                charts.categoryPieChart.destroy();
+            }
+            
+            const categories = Object.keys(hoursByCategory);
+            const hours = Object.values(hoursByCategory);
+            
+            const colors = [
+                '#2563eb', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'
+            ];
+            
+            charts.categoryPieChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: categories,
+                    datasets: [{
+                        data: hours,
+                        backgroundColor: colors.slice(0, categories.length),
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.parsed || 0;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((value / total) * 100).toFixed(1);
+                                    return `${label}: ${value.toFixed(1)}時間 (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 総合評価の推移グラフ
+        function renderRatingChart(dailyData) {
+            const ctx = document.getElementById('ratingChart').getContext('2d');
+            
+            if (charts.ratingChart) {
+                charts.ratingChart.destroy();
+            }
+            
+            charts.ratingChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dailyData.map(d => d.date),
+                    datasets: [{
+                        label: '総合評価',
+                        data: dailyData.map(d => d.rating),
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 5,
+                            ticks: {
+                                stepSize: 1
+                            },
+                            title: {
+                                display: true,
+                                text: '評価 (⭐)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // タスク完了状況グラフ
+        function renderTaskCompletionChart(dailyData) {
+            const ctx = document.getElementById('taskCompletionChart').getContext('2d');
+            
+            if (charts.taskCompletionChart) {
+                charts.taskCompletionChart.destroy();
+            }
+            
+            charts.taskCompletionChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: dailyData.map(d => d.date),
+                    datasets: [
+                        {
+                            label: '完了タスク',
+                            data: dailyData.map(d => d.completedTasks),
+                            backgroundColor: '#10b981',
+                            borderRadius: 4
+                        },
+                        {
+                            label: '未完了タスク',
+                            data: dailyData.map(d => d.taskCount - d.completedTasks),
+                            backgroundColor: '#f59e0b',
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: true
+                        },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            },
+                            title: {
+                                display: true,
+                                text: 'タスク数'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 成果・達成事項を描画
+        function renderAchievements(achievements) {
+            const html = achievements.slice(0, 10).map(item => `
+                <div class="list-item achievement-item">
+                    <div class="list-item-date">${item.date}</div>
+                    <div class="list-item-content">${item.achievement}</div>
+                </div>
+            `).join('');
+            
+            document.getElementById('achievementsList').innerHTML = html || '<p class="text-muted">成果・達成事項がありません</p>';
+        }
+
+        // 課題・問題点を描画
+        function renderIssues(issues) {
+            const html = issues.slice(0, 10).map(item => `
+                <div class="list-item issue-item">
+                    <div class="list-item-date">${item.date}</div>
+                    <div class="list-item-content">${item.issue}</div>
+                </div>
+            `).join('');
+            
+            document.getElementById('issuesList').innerHTML = html || '<p class="text-muted">課題・問題点がありません</p>';
+        }
+
+        // タスクテーブルを描画
+        function renderTasksTable(tasks) {
+            const html = tasks.map(task => {
+                const progressBadge = task.progress === '完了' 
+                    ? '<span class="badge badge-success">完了</span>'
+                    : task.progress.includes('%')
+                    ? '<span class="badge badge-warning">' + task.progress + '</span>'
+                    : '<span class="badge badge-info">' + task.progress + '</span>';
+                
+                return `
+                    <tr>
+                        <td>${task.date}</td>
+                        <td>${task.name}</td>
+                        <td><span class="badge badge-info">${task.category}</span></td>
+                        <td>${task.hours.toFixed(1)}時間</td>
+                        <td>${progressBadge}</td>
+                    </tr>
+                `;
+            }).join('');
+            
+            document.getElementById('tasksTableBody').innerHTML = html;
+        }
+    </script>
+</body>
+</html>
+
+
+
