@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>営業成果実績 - ビジネス推進の軌跡</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', 'Hiragino Sans', sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #333;
+        }
+        
+        .slide-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+        
+        .slide {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 1200px;
+            width: 100%;
+            padding: 60px;
+            animation: fadeIn 0.8s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 3px solid #f5576c;
+        }
+        
+        h1 {
+            font-size: 3em;
+            color: #f5576c;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1.5em;
+            color: #666;
+            font-weight: 400;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.3);
+        }
+        
+        .highlight-box h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .achievement-card {
+            background: #fff5f7;
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #f5576c;
+            transition: transform 0.3s ease;
+        }
+        
+        .achievement-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.2);
+        }
+        
+        .achievement-card h3 {
+            font-size: 1.8em;
+            color: #f5576c;
+            margin-bottom: 15px;
+        }
+        
+        .achievement-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .achievement-card li {
+            padding: 10px 0;
+            border-bottom: 1px solid #ffd4dc;
+            font-size: 1.1em;
+        }
+        
+        .achievement-card li:last-child {
+            border-bottom: none;
+        }
+        
+        .stats-row {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 40px 0;
+            gap: 30px;
+        }
+        
+        .stat-box {
+            flex: 1;
+            min-width: 200px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.3);
+        }
+        
+        .stat-box .number {
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .stat-box .label {
+            font-size: 1.2em;
+        }
+        
+        .content-section {
+            margin: 40px 0;
+        }
+        
+        .content-section h3 {
+            font-size: 2em;
+            color: #f5576c;
+            margin-bottom: 20px;
+            padding-left: 20px;
+            border-left: 5px solid #f5576c;
+        }
+        
+        .list-item {
+            background: #fff5f7;
+            padding: 20px 30px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 5px solid #f093fb;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+        
+        .list-item:hover {
+            background: #ffe8ed;
+            transform: translateX(10px);
+        }
+        
+        .emoji {
+            font-size: 1.5em;
+            margin-right: 15px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: white;
+            font-size: 1.1em;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 15px 40px;
+            background: white;
+            color: #f5576c;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="slide">
+            <div class="header">
+                <h1>📈 営業成果実績</h1>
+                <div class="subtitle">ビジネス推進の軌跡と成功事例</div>
+            </div>
+            
+            <div class="highlight-box">
+                <h2>🎯 週次ビジネス成果サマリー</h2>
+            </div>
+            
+            <div class="stats-row">
+                <div class="stat-box">
+                    <div class="number">3</div>
+                    <div class="label">顧客対応件数</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">8%</div>
+                    <div class="label">売上増加率</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">5+</div>
+                    <div class="label">提案資料作成</div>
+                </div>
+            </div>
+            
+            <div class="achievement-grid">
+                <div class="achievement-card">
+                    <h3>✅ 既存顧客対応</h3>
+                    <ul>
+                        <li>追加提案資料完成（15ページ）</li>
+                        <li>1時間のプレゼンテーション実施</li>
+                        <li>好感触を獲得</li>
+                        <li>2週間後フォローアップ設定済み</li>
+                    </ul>
+                </div>
+                
+                <div class="achievement-card">
+                    <h3>🆕 新規顧客開拓</h3>
+                    <ul>
+                        <li>2件の初回ヒアリング完了</li>
+                        <li>課題・予算・導入時期確認</li>
+                        <li>提案準備開始</li>
+                        <li>次回アクション確定</li>
+                    </ul>
+                </div>
+                
+                <div class="achievement-card">
+                    <h3>📊 経営報告成功</h3>
+                    <ul>
+                        <li>経営会議で週次レポート報告</li>
+                        <li>売上8%増の要因分析共有</li>
+                        <li>データ視覚化で高評価獲得</li>
+                        <li>今後の戦略提案採用</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="content-section">
+                <h3>💡 成功のポイント</h3>
+                <div class="list-item">
+                    <span class="emoji">📝</span>事前準備の徹底 - 顧客商談の準備充実が成功の鍵
+                </div>
+                <div class="list-item">
+                    <span class="emoji">📊</span>データ視覚化 - グラフ・チャートによる報告が経営会議で効果的
+                </div>
+                <div class="list-item">
+                    <span class="emoji">🤝</span>既存・新規バランス - 複数案件を同時進行で着実な成果
+                </div>
+                <div class="list-item">
+                    <span class="emoji">🔄</span>継続フォロー - 2週間後のフォローアップ設定で関係構築
+                </div>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="index.html" class="back-link">← トップページに戻る</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        週次活動報告 2025年11月3日～8日
+    </div>
+</body>
+</html>
+
