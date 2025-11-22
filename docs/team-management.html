@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>チーム運営成果 - リーダーシップの実践</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Yu Gothic', 'Hiragino Sans', sans-serif;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #333;
+        }
+        
+        .slide-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+        
+        .slide {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 1200px;
+            width: 100%;
+            padding: 60px;
+            animation: fadeIn 0.8s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 3px solid #00f2fe;
+        }
+        
+        h1 {
+            font-size: 3em;
+            color: #00f2fe;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1.5em;
+            color: #666;
+            font-weight: 400;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.3);
+        }
+        
+        .highlight-box h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .management-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .management-card {
+            background: #f0fbff;
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #00f2fe;
+            transition: transform 0.3s ease;
+        }
+        
+        .management-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.2);
+        }
+        
+        .management-card h3 {
+            font-size: 1.8em;
+            color: #00f2fe;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .management-card .icon {
+            font-size: 1.5em;
+            margin-right: 15px;
+        }
+        
+        .management-card p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #555;
+        }
+        
+        .content-section {
+            margin: 40px 0;
+        }
+        
+        .content-section h3 {
+            font-size: 2em;
+            color: #00f2fe;
+            margin-bottom: 20px;
+            padding-left: 20px;
+            border-left: 5px solid #00f2fe;
+        }
+        
+        .list-item {
+            background: #f0fbff;
+            padding: 20px 30px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 5px solid #4facfe;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+        
+        .list-item:hover {
+            background: #d9f5ff;
+            transform: translateX(10px);
+        }
+        
+        .emoji {
+            font-size: 1.5em;
+            margin-right: 15px;
+        }
+        
+        .key-points {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin: 40px 0;
+        }
+        
+        .key-points h3 {
+            font-size: 2em;
+            margin-bottom: 25px;
+            text-align: center;
+            border: none;
+            padding: 0;
+        }
+        
+        .key-points ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .key-points li {
+            padding: 15px 20px;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            font-size: 1.2em;
+            backdrop-filter: blur(10px);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: white;
+            font-size: 1.1em;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 15px 40px;
+            background: white;
+            color: #00f2fe;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="slide">
+            <div class="header">
+                <h1>👥 チーム運営成果</h1>
+                <div class="subtitle">リーダーシップの実践と組織強化</div>
+            </div>
+            
+            <div class="highlight-box">
+                <h2>🌟 マネジメント実績サマリー</h2>
+            </div>
+            
+            <div class="management-grid">
+                <div class="management-card">
+                    <h3><span class="icon">💬</span>1on1実施</h3>
+                    <p>チームメンバー3名と個別面談を実施。個別課題のサポート、新ツール提案を受領し、メンバーの本音を引き出すことに成功。</p>
+                </div>
+                
+                <div class="management-card">
+                    <h3><span class="icon">🔧</span>新ツール導入</h3>
+                    <p>3ツールの比較検討を完了。チーム会議で全員参加の議論を行い、トライアル導入を決定。業務効率化に向けた第一歩。</p>
+                </div>
+                
+                <div class="management-card">
+                    <h3><span class="icon">📊</span>経営報告</h3>
+                    <p>経営会議で週次レポートを報告。データ視覚化により高評価を獲得。売上8%増の要因分析を共有し、戦略提案が採用。</p>
+                </div>
+                
+                <div class="management-card">
+                    <h3><span class="icon">🤝</span>部署間連携</h3>
+                    <p>社内報告会を通じて他部署との連携機会を2件発見。連携企画書を作成し、来月始動予定。新しい協力体制の構築に成功。</p>
+                </div>
+                
+                <div class="management-card">
+                    <h3><span class="icon">📋</span>プロジェクト管理</h3>
+                    <p>プロジェクトA中間レビューを実施。次フェーズ方針について合意を形成。リカバリープラン策定で遅延課題にも対応。</p>
+                </div>
+                
+                <div class="management-card">
+                    <h3><span class="icon">🎯</span>優先順位管理</h3>
+                    <p>複数プロジェクト並行時の優先順位を明確化。チーム全体で約51時間（週平均8.5時間/日）の効率的な業務推進を実現。</p>
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <h3>💡 リーダーシップの学び</h3>
+                <ul>
+                    <li><span class="emoji">🎯</span>優先順位管理の重要性 - 複数プロジェクトでも効率的推進</li>
+                    <li><span class="emoji">💬</span>チーム対話の価値 - 1on1・会議でメンバーの本音とアイデアを引き出す</li>
+                    <li><span class="emoji">📊</span>データ視覚化の効果 - 経営層への報告で高評価獲得</li>
+                    <li><span class="emoji">🤝</span>部署間連携の可能性 - 社内報告会が新たな接点創出の機会に</li>
+                    <li><span class="emoji">📝</span>事前準備の効果 - 充実した準備が会議成功の鍵</li>
+                </ul>
+            </div>
+            
+            <div class="content-section">
+                <h3>✨ 今後の展開</h3>
+                <div class="list-item">
+                    <span class="emoji">🚀</span>新ツールのトライアル開始とチーム全体への展開
+                </div>
+                <div class="list-item">
+                    <span class="emoji">🤝</span>他部署連携企画の上長承認フォローと実行
+                </div>
+                <div class="list-item">
+                    <span class="emoji">📈</span>週次レポート作成の自動化ツール導入を検討
+                </div>
+                <div class="list-item">
+                    <span class="emoji">👨‍🏫</span>Cursor講座のフォローアップと次回企画の立案
+                </div>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="index.html" class="back-link">← トップページに戻る</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        週次活動報告 2025年11月3日～8日
+    </div>
+</body>
+</html>
+
